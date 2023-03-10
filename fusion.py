@@ -100,13 +100,38 @@ def scan():
     R.see()
     sheep = R.see()
     
-    if sheep == []:
+    if len(sheep) < 1:
         turn(60)
-        return
 
     elif sheep[0].info.id in range(40):
         print("I see a sheep")
         polar(marker = sheep[0])
+
+collected = 0
+while True:
+    if collected < 3:
+        markers = R.see()
+        if len(markers) > 0:
+            for marker in markers:
+                if marker.info.type == robot.MARKER_TYPE.SHEEP:
+                    if marker.info.owner:
+                        print("[LOG] found a sheep and we own it")
+                        
+                        if gotocube(marker.info.id):
+
+                            if collect_sequence():
+                                collected += 1
+
+                        else:
+                            print("[LOG] lost sheep")
+                    else:
+                        print("[LOG] found a sheep but we dont own it")
+        else:
+            scan()
+            
+    else:
+        print("[LOG] going to pen to empty")
+        go_to_pen()
 
 def angled(e):
     e.bearing.y
@@ -174,69 +199,35 @@ def go_to_pen():
     inpen = False
     atedge = False
     while not inpen:
-        if not atedge:
-            if not check_front_prx():
-                markers = R.see()
-                for markeridx in range(len(markers)):
-                    print(markers[markeridx].info.type)
+        if not front_prox:
+            markers = R.see()
+            for markeridx in markers:
+                print(markeridx.info.type)
 
-                    if markers[markeridx].info.type == robot.MARKER_OWNER.ARENA:#only if part of arena (not if home zone)
-                        if markers[markeridx].info.owner:
+                if markeridx.info.type == robot.MARKER_OWNER.ARENA:#only if part of arena (not if home zone)
+                    if markeridx.info.owner:
 
-                            if primarymarkerid == "" or not primarymarkerid in markers:
+                        if primarymarkerid == "" or not primarymarkerid in markers:
                                 primarymarkerid = markers[0].info.id
                                 print(markers[0].info.id)
 
                             #point towards marker with primarymarkerid and move motors
 
-                        else:
+                    else:
                             search_step()
-            else:
-                print("reached edge")
-                atedge = True
         else:
-            #rotate 180 and move foward until tape crossed
+            polar(10, 180)
             #dump
             pass
 
 
 def inmarkers(markers, currentmkrid):
-    inmarkers = False
     for marker in markers:
         if marker.info.id == currentmkrid:
-            inmarkers = True
-    return inmarkers
+            return True
+    return False
 
 
-    
-     
-collected = 0
-while True:
-    if collected < 3:
-        currentmkrid = ""
-        markers = R.see()
-        if len(markers) > 0:
-            for markeridx in range(len(markers)):
-
-                if markers[markeridx].info.type == robot.MARKER_TYPE.SHEEP:
-                    if markers[markeridx].info.owner:
-                        print("[LOG] found a sheep and we own it")
-                        
-                        if gotocube(markers[markeridx].info.id):
-
-                            if collect_sequence():
-                                collected += 1
-
-                        else:
-                            print("[LOG] lost sheep")
-                    else:
-                        print("[LOG] found a sheep but we dont own it")
-        else:
-            search_step()
-            
-    else:
-        print("[LOG] going to pen to empty")
-        go_to_pen()
 
 
 

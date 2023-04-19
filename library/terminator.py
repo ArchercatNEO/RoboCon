@@ -2,25 +2,41 @@ import robot, time, math, itertools
 
 class Terminator(robot.Robot):
     
-    x = 0.0
-    y = 0.0
-    angle = 0.0
+    match zone:
+
+        case robot.TEAM.LEON:
+            x = 0.0
+            y = 0.0
+            angle = 0.0
+        case robot.TEAM.LEON:
+            x = 0.0
+            y = 0.0
+            angle = 0.0
+        case robot.TEAM.LEON:
+            x = 0.0
+            y = 0.0
+            angle = 0.0
+        case robot.TEAM.LEON:
+            x = 0.0
+            y = 0.0
+            angle = 0.0
+    
     speed = 0.0
     
-    length = 6
     locations = []
-    for i in range(length):
-        locations.append([i + 0.5, length])
-    for i in range(length):
-        locations.append([length, 6.5 - i])
-    for i in range(length):
-        locations.append([6.5 - i, 0])
-    for i in range(length):
-        locations.append([0, i + 0.5])
-
-    def __init__(self, maxSpeed: float):
+    
+    def __init__(self, maxSpeed: float, length = 6):
         
         self.speed = maxSpeed
+
+        for i in range(length):
+            self.locations.append([i + 0.5, length])
+        for i in range(length):
+            self.locations.append([length, 6.5 - i])
+        for i in range(length):
+            self.locations.append([6.5 - i, 0])
+        for i in range(length):
+            self.locations.append([0, i + 0.5])
 
     def move(self, meters: float, speed = speed):
         
@@ -69,7 +85,7 @@ class Terminator(robot.Robot):
         return 100
     
     #use wall markers and their positions to calculate our position and angle
-    def triangulate(self, markers: list):
+    def triangulate(self, markers):
 
         Ax = 0
         Ay = 0
@@ -108,3 +124,12 @@ class Terminator(robot.Robot):
         self.x = Ax /count
         self.y = Ay /count
         self.angle = Aangle /count
+
+    #Look for markers, feed wall markers to triangulate and return non-wall markers
+    def peek(self):
+
+        markers = self.see()
+
+        self.triangulate(filter(lambda marker : (marker.info.owner == robot.MARKER_OWNER.ARENA), markers))
+
+        return filter(lambda marker: (marker.info.owner != robot.MARKER_OWNER.ARENA), markers)

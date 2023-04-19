@@ -2,33 +2,38 @@ import robot, time, math, itertools
 
 class Terminator(robot.Robot):
     
-    match zone:
-
-        case robot.TEAM.LEON:
-            x = 0.0
-            y = 0.0
-            angle = 0.0
-        case robot.TEAM.LEON:
-            x = 0.0
-            y = 0.0
-            angle = 0.0
-        case robot.TEAM.LEON:
-            x = 0.0
-            y = 0.0
-            angle = 0.0
-        case robot.TEAM.LEON:
-            x = 0.0
-            y = 0.0
-            angle = 0.0
     
-    speed = 0.0
-    
-    locations = []
+    speed = 0
     
     def __init__(self, maxSpeed: float, length = 6):
         
         self.speed = maxSpeed
+        
+        #set initial coords to 0.25m either side away from corner and pointing to the center
+        match self.zone:
 
+            case robot.TEAM.LEON:
+                self.x = 0.25
+                self.y = length - 0.25
+                self.angle = -45.0
+            
+            case robot.TEAM.ZHORA:
+                self.x = length - 0.25
+                self.y = length - 0.25
+                self.angle = -90.0
+            
+            case robot.TEAM.ROY:
+                self.x = length - 0.25
+                self.y = 0.25
+                self.angle = 90.0
+            
+            case robot.TEAM.PRIS:
+                self.x = 0.25
+                self.y = 0.25
+                self.angle = 45.0
+
+        #set up the coords of the wall markers to be used in triangulate
+        self.locations = []
         for i in range(length):
             self.locations.append([i + 0.5, length])
         for i in range(length):
@@ -130,6 +135,6 @@ class Terminator(robot.Robot):
 
         markers = self.see()
 
-        self.triangulate(filter(lambda marker : (marker.info.owner == robot.MARKER_OWNER.ARENA), markers))
+        self.triangulate(filter(lambda marker: (marker.info.owner == robot.MARKER_OWNER.ARENA), markers))
 
         return filter(lambda marker: (marker.info.owner != robot.MARKER_OWNER.ARENA), markers)

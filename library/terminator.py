@@ -1,7 +1,7 @@
-import robot, time, math, itertools
+import time, math, itertools
+from robot import robot
 
 class Terminator(robot.Robot):
-    
     
     speed = 0
     
@@ -138,3 +138,4 @@ class Terminator(robot.Robot):
         self.triangulate(filter(lambda marker: (marker.info.owner == robot.MARKER_OWNER.ARENA), markers))
 
         return filter(lambda marker: (marker.info.owner != robot.MARKER_OWNER.ARENA), markers)
+    

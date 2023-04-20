@@ -123,7 +123,7 @@ class Terminator(robot.Robot):
             angle = math.asin(math.sin((a1 - a2) * math.pi/180) /distance * d2)
 
             Ax += math.cos(angle) * d1 - x1
-            Ay += math.sin(angle) * d1 - x2
+            Ay += math.sin(angle) * d1 - y1
             Aangle += a1 + angle
 
         self.x = Ax /count

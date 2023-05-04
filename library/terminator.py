@@ -1,4 +1,4 @@
-import time, math, itertools
+import time, math, itertools, asyncio
 from robot import robot
 
 class Terminator(robot.Robot):
@@ -43,7 +43,7 @@ class Terminator(robot.Robot):
         for i in range(length):
             self.locations.append([0, i + 0.5])
 
-    def move(self, meters: float, speed = speed):
+    async def move(self, meters: float, speed = speed):
         
         self.x += math.cos(self.angle * math.pi/180) * meters
         self.y += math.sin(self.angle * math.pi/180) * meters
@@ -51,12 +51,12 @@ class Terminator(robot.Robot):
         self.motors[0] = self.getPower(speed)
         self.motors[1] = self.getPower(speed)
 
-        time.sleep(meters / speed)
+        await asyncio.sleep(meters / speed)
 
         self.motors[0] = 0
         self.motors[1] = 0
 
-    def turn(self, degrees: float, speed = speed):
+    async def turn(self, degrees: float, speed = speed):
 
         self.angle += degrees * math.pi/180
 
@@ -65,17 +65,17 @@ class Terminator(robot.Robot):
         self.motors[0] = self.getPower(speed) * sign
         self.motors[1] = self.getPower(speed) * -sign 
 
-        time.sleep(degrees / speed)
+        await asyncio.sleep(degrees / speed)
 
         self.motors[0] = 0
         self.motors[1] = 0
 
-    def goto(self, marker):
+    async def goto(self, marker):
 
-        self.turn(marker.bearing.y)
-        self.move(marker.dist)
+        await self.turn(marker.bearing.y)
+        await self.move(marker.dist)
 
-    def snap(self, x: float, y: float):
+    async def snap(self, x: float, y: float):
 
         x -= self.x
         y -= self.y
@@ -83,8 +83,8 @@ class Terminator(robot.Robot):
         dist = math.sqrt(x**2 + y**2)
         angle = math.asin(y/dist)
 
-        self.turn(angle)
-        self.move(dist)
+        await self.turn(angle)
+        await self.move(dist)
 
     def getPower(self, speed: float):
         return 100

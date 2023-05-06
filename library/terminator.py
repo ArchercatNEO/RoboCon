@@ -1,10 +1,14 @@
-import time, math, itertools, asyncio
+import math, itertools, asyncio
 from robot import robot
+from robot.robot import vision
+from robot.robot.sheepdog_trials import markers
 
 class Terminator(robot.Robot):
     
-    speed = 0
+    speed = 0.0
     
+    # Called when making the variable we'll interact with
+    # Just sets some values to initial positions
     def __init__(self, maxSpeed: float, length = 6):
         
         self.speed = maxSpeed
@@ -42,8 +46,14 @@ class Terminator(robot.Robot):
             self.locations.append([6.5 - i, 0])
         for i in range(length):
             self.locations.append([0, i + 0.5])
-
+            
     async def move(self, meters: float, speed = speed):
+        """
+        Move x meters at max speed.
+        Takes additional arguments to go slower.
+        """
+
+        
         
         self.x += math.cos(self.angle * math.pi/180) * meters
         self.y += math.sin(self.angle * math.pi/180) * meters
@@ -57,6 +67,10 @@ class Terminator(robot.Robot):
         self.motors[1] = 0
 
     async def turn(self, degrees: float, speed = speed):
+        """
+        Turns x degrees at max speed.
+        Takes additional arguments to go slower.
+        """
 
         self.angle += degrees * math.pi/180
 
@@ -71,11 +85,17 @@ class Terminator(robot.Robot):
         self.motors[1] = 0
 
     async def goto(self, marker):
+        """
+        Uses the properties of a marker object to turn and move towards it.
+        """
 
         await self.turn(marker.bearing.y)
         await self.move(marker.dist)
 
     async def snap(self, x: float, y: float):
+        """
+        Uses the robot's position and rotation to move towards a location in the arena.
+        """
 
         x -= self.x
         y -= self.y
@@ -133,9 +153,8 @@ class Terminator(robot.Robot):
     #Look for markers, feed wall markers to triangulate and return non-wall markers
     def peek(self):
 
-        markers = self.see()
+        sheep = self.see()
+        self.triangulate(filter(lambda marker: (marker.info.owner == markers.MARKER_OWNER.ARENA), sheep)) 
 
-        self.triangulate(filter(lambda marker: (marker.info.owner == robot.MARKER_OWNER.ARENA), markers))
-
-        return filter(lambda marker: (marker.info.owner != robot.MARKER_OWNER.ARENA), markers)
+        return filter(lambda marker: (marker.info.owner != robot.MARKER_OWNER.ARENA), sheep)
     

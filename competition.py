@@ -1,2 +1,2 @@
-from library import terminator
+from . import terminator
 import asyncio

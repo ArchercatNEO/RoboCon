@@ -1,4 +1,4 @@
-from library import terminator
+from . import terminator
 import asyncio
 
 R = terminator.Terminator(10)

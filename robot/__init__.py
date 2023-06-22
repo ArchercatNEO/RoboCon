@@ -24,9 +24,9 @@ import sys
 # provide it as part of this package.
 import robot.log
 
-from robot.robot.wrapper import Robot, NoCameraPresent
+from robot.wrapper import Robot, NoCameraPresent
 from robot.greengiant import OUTPUT, INPUT, INPUT_ANALOG, INPUT_PULLUP
-from robot.robot.vision import RoboConUSBCamera
+from robot.vision import RoboConUSBCamera
 from robot.sheepdog_trials import (
     MARKER,
     BASE_MARKER,

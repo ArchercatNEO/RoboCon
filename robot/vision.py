@@ -55,7 +55,7 @@ class Marker():
                 f"  info.id = {self.info.id}\n"
                 f"  info.owning_team or info.owner = {self.info.owning_team or self.info.owner}\n"
                 f"  dist = {self.dist:.3}\n"
-                f"  bearing.y = {self.bearing.y:.3}\n"
+                f"  bearing.y = {self.bearing.y:.3}\n" 
                 f"  bearing.x = {self.bearing.x:.3}\n"
                 f"  rotation.y = {self.rotation.y:.3}\n"
                 f"  rotation.x = {self.rotation.x:.3}\n"

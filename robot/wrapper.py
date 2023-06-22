@@ -16,11 +16,11 @@ import typing
 from datetime import datetime
 from smbus2 import SMBus
 
-from robot.robot import vision
+from robot import vision
 from robot.cytron import CytronBoard
 from robot.greengiant import GreenGiantInternal, GreenGiantGPIOPinList, GreenGiantPWM
 from robot.sheepdog_trials.teams import TEAM
-from ... import sheepdog_trials
+import sheepdog_trials
 
 _logger = logging.getLogger("robot")
 

@@ -4,7 +4,7 @@ descent algo.
 Usage:
 import robot.calibrate_camera
 """
-import robot
+from robot import robot
 import math
 import pprint
 
@@ -33,7 +33,7 @@ def _get_reading_number(error):
     return result
 
 
-R = robot.Robot()
+R = robot.Robot() 
 result = {}
 
 for res in R.camera.focal_lengths.copy():
@@ -66,6 +66,6 @@ for res in R.camera.focal_lengths.copy():
             max(dists), min(dists), max(dists) - min(dists)))
         print("    P = {} reading_counts {}".format(error * KP, reading_counts))
 
-    result[res] = (value, value)
+    result[res] = (value, value) 
 
 pprint.pprint(result)

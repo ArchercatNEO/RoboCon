@@ -1,12 +1,38 @@
-import math, itertools, asyncio
-from robot import robot
-from robot.robot import vision
-from robot.robot.sheepdog_trials import markers
+import math, itertools, asyncio, time, robot
+from enum import Enum
+from robot.sheepdog_trials import markers
 
 class Terminator(robot.Robot):
     
     speed = 0.0
+
+    zero = time.time()
+    def now(self):
+        return time.time() - self.zero
     
+    class Logging(Enum):
+        Debug = 5
+        Zero = 4
+        Main = 3
+        Minor = 2
+        Pedantic = 1
+        Get = 0
+    
+    log_level = Logging.Main
+    log_list = {
+        "move" : Logging.Pedantic,
+        "turn" : Logging.Pedantic,
+        "goto" : Logging.Minor,
+        "snap" : Logging.Minor,
+        "peek" : Logging.Pedantic,
+        "triangulate" : Logging.Pedantic,
+        "getPower" : Logging.Get,
+    }
+    
+    def trace(self, parent: str, log: str, format: dict):
+        if self.log_list[parent].value >= self.log_level.value:
+            print(log)
+
     # Called when making the variable we'll interact with
     # Just sets some values to initial positions
     def __init__(self, maxSpeed: float, length = 6):
@@ -112,9 +138,9 @@ class Terminator(robot.Robot):
     #use wall markers and their positions to calculate our position and angle
     def triangulate(self, markers):
 
-        Ax = 0
-        Ay = 0
-        Aangle = 0
+        averageX = 0
+        averageY = 0
+        averageAngle = 0
         count = 0
 
         #do the loop for every combination of 2 markers we have, no duplicates
@@ -142,13 +168,13 @@ class Terminator(robot.Robot):
             #trig to find an angle (law of sines)
             angle = math.asin(math.sin((a1 - a2) * math.pi/180) /distance * d2)
 
-            Ax += math.cos(angle) * d1 - x1
-            Ay += math.sin(angle) * d1 - y1
-            Aangle += a1 + angle
+            averageX += math.cos(angle) * d1 - x1
+            averageY += math.sin(angle) * d1 - y1
+            averageAngle += a1 + angle
 
-        self.x = Ax /count
-        self.y = Ay /count
-        self.angle = Aangle /count
+        self.x = averageX /count
+        self.y = averageY /count
+        self.angle = averageAngle /count
 
     #Look for markers, feed wall markers to triangulate and return non-wall markers
     def peek(self):
@@ -156,5 +182,5 @@ class Terminator(robot.Robot):
         sheep = self.see()
         self.triangulate(filter(lambda marker: (marker.info.owner == markers.MARKER_OWNER.ARENA), sheep)) 
 
-        return filter(lambda marker: (marker.info.owner != robot.MARKER_OWNER.ARENA), sheep)
+        return filter(lambda marker: (marker.info.owner != markers.MARKER_OWNER.ARENA), sheep)
     

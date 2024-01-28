@@ -1,5 +1,17 @@
 {
     "python.analysis.autoImportCompletions": true,
     "python.analysis.inlayHints.variableTypes": true,
-    "python.analysis.typeCheckingMode": "strict"
+    "python.analysis.typeCheckingMode": "strict",
+
+    "files.exclude": {
+        "robot-debugger/out": false, // set this to true to hide the "out" folder with the compiled JS files
+        "robot-debugger/dist": false // set this to true to hide the "dist" folder with the compiled JS files
+    },
+    "search.exclude": {
+        "robot-debugger/out": true, // set this to false to include "out" folder in search results
+        "robot-debugger/dist": true // set this to false to include "dist" folder in search results
+    },
+    // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
+    "typescript.tsc.autoDetect": "off",
+    "cmake.configureOnOpen": false
 }

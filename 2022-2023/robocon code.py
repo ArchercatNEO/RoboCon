@@ -1,4 +1,5 @@
 import robot, time, math
+from operator import itemgetter
 
 R = robot.Robot()
 
@@ -36,7 +37,7 @@ for i in range(length - 1):
 
 
 def queue(task, sleep, tag, overwrite = False):
-    if overwrite or tasks[tag][1] == 10**100:
+    if overwrite or tasks[tag][0] == "panic()":
         tasks[tag] = [task, time.time() - zero + sleep, tag]
     
 
@@ -82,15 +83,13 @@ def check():
         if smallesttask[1] == None:
             smallesttask = task
             continue
-        if smallesttask[1] - time.time() + zero < 0 :
-            tasks[smallesttask[2]][1] = 10**100
-            continue
         if task[1] < smallesttask[1]:
                 smallesttask = task
     
     if smallesttask[1] < time.time() - zero + frame:
         time.sleep(smallesttask[1] - time.time() + zero)
         eval(smallesttask[0])
+        tasks[smallesttask[2]] = ["panic()", 10**100, smallesttask[2]]
         check()
 
 def scan():
@@ -123,13 +122,16 @@ def trianglulate():
     xy = [math.cos(angle) * dist - pos[0], math.sin(angle) * dist - pos[1]]
     innerAngle = bigger[0] + angle
 
+def panic():
+    while True:
+        print("How did we get here")
 
 def front_prox_timeout():
     global front_prox, seen_front_prox
+    time.sleep(frontProxTimeout)
 
     front_prox = False
     seen_front_prox = False
-    queue("front_prox_timeout()", frontProxTimeout, "proximity")
 
 while True:
     time.sleep(frame/1000)

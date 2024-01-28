@@ -87,7 +87,7 @@ def snap(x, y):
     angle = math.degrees(math.asin(y/dist))
     return polar(dist, angle)
 
-def polar(distance = 0.0, angle = 0.0, marker = {}):
+def polar(distance = 0, angle = 0, marker = 0):
     global xy, innerAngle
 
     if marker != 0:

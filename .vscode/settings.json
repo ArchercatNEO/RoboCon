@@ -1,6 +1,5 @@
 {
-    "python.analysis.typeCheckingMode": "strict",
-    "python.analysis.extraPaths": [
-        "./robotsrc"
-    ]
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.typeCheckingMode": "strict"
 }

@@ -7,15 +7,45 @@
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Debuggers"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onDebug"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "robot-debugger.helloWorld",
-        "title": "Hello World"
+        "title": "Start the Robot",
+        "command": "brainbox.start",
+        "category": "Robocon"
+      },
+      {
+        "title": "Stop the Robot",
+        "command": "brainbox.stop",
+        "category": "Robocon"
+      },
+      {
+        "title": "Sync files",
+        "command": "brainbox.sync",
+        "category": "Robocon"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+alt+s",
+        "command": "brainbox.start",
+        "when": "editorFocus"
+      },
+      {
+        "key": "ctrl+alt+h",
+        "command": "brainbox.stop",
+        "when": "editorFocus"
+      },
+      {
+        "key": "ctrl+alt+c",
+        "command": "brainbox.sync",
+        "when": "editorFocus"
       }
     ]
   },
@@ -31,17 +61,20 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.85.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
+    "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
-    "ts-loader": "^9.5.1",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4",
     "@vscode/test-cli": "^0.0.4",
-    "@vscode/test-electron": "^2.3.8"
+    "@vscode/test-electron": "^2.3.8",
+    "eslint": "^8.56.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1"
   }
 }

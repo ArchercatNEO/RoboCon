@@ -1,8 +1,11 @@
-import asyncio
+import time
 import robot
 
 from wheels import Wheels
 
 R = robot.Robot()
 W = Wheels(R.motors)
-asyncio.run(W.turn(100))
+R.see()
+while True:
+    print("Running stuff")
+    time.sleep(1)

@@ -1,12 +1,13 @@
 import asyncio
+from typing import Union
 
 from robot.cytron import CytronBoard
 from robot.greengiant import GreenGiantMotors
 
 class Wheels:
-    def __init__(self, motors: (GreenGiantMotors | CytronBoard)) -> None:
+    def __init__(self, motors: Union[GreenGiantMotors, CytronBoard]) -> None:
+        print("Wheels have started")
         self.motors = motors
-        return
     
     async def move(self, meters: int) -> None:
         sign = int(meters / abs(meters))

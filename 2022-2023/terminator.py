@@ -7,10 +7,9 @@ import asyncio
 import time
 from enum import Enum
 from typing import Iterable
-from mocksrc.robot import Robot
-from robotsrc import robot
-from robotsrc.robot import markers
-from robotsrc.robot import vision
+from robot import Robot
+from robot import markers
+from robot import vision
 
 
 def is_arena_marker(marker: vision.Marker) -> bool:

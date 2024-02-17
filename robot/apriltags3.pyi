@@ -166,7 +166,7 @@ class Detection(object):
     """Combined pythonic wrapper for apriltag_detection and apriltag_pose"""
 
     def __init__(self) -> None:
-        self.tag_family = None
+        self.tag_family: str = None
         self.tag_id = None
         self.hamming = None
         self.decision_margin = None
@@ -177,8 +177,8 @@ class Detection(object):
         self.pose_T = None
         self.pose_err = None
         self.dist: float = None
-        self.bearing = None
-        self.rotation = None
+        self.bearing: Coords = None
+        self.rotation: Coords = None
 
     def __str__(self) -> str: ...
     def __repr__(self) -> str: ...

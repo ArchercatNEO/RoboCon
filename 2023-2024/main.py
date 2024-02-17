@@ -1,13 +1,24 @@
 import asyncio
 import sys
-import robot
+
+from robot import Robot
 
 from wheels import Wheels
 
-R = robot.Robot()
-R.see()
+async def main() -> int:
+    print("Expecting python3.9")
+    print(sys.version)
 
-W = Wheels(R.motors)
-asyncio.run(W.move(100))
+    robot = Robot()
+    wheels = Wheels(robot.motors)
 
-print(sys.version)
+    sheep = robot.see()
+    for marker in sheep:
+        await wheels.goto(marker)
+
+    await wheels.move(100)
+
+    return 0
+
+if __name__ == "__main__":
+    asyncio.run(main())

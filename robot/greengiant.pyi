@@ -581,12 +581,12 @@ class UltrasonicSensor:
             time.sleep(0.05)
         return pin.timer
 
-    def read_ultra(self, echo, timeout: float = 0.5) -> (float | None):
+    def read_ultra(self, echo, timeout: float = 0.5) -> float:
         if echo.mode != TIMER:
             raise Exception("Echo pin should be timer")
         raw_result = self.wait_for_pin(echo, timeout=timeout)
 
-    def read(self, timeout: float = 0.5):
+    def read(self, timeout: float = 0.5) -> (float | list[float]):
         """Reads ultrasonic sensor, flick trigger pin, then record output and return distance in meters"""
         if self._trig_pin.mode != OUTPUT:
             raise Exception("Trigger pin mode should be output")

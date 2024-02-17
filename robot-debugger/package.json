@@ -9,10 +9,14 @@
   "categories": [
     "Debuggers"
   ],
-  "activationEvents": [
-    "onDebug"
-  ],
+  "author": {
+    "name": "ArchercatNEO"
+  },
   "main": "./dist/extension.js",
+  "directories": {
+    "bin": "./src",
+    "test": "./src/test"
+  },
   "contributes": {
     "commands": [
       {

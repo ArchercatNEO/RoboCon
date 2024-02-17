@@ -3,11 +3,15 @@ from typing import Union
 
 from robot.cytron import CytronBoard
 from robot.greengiant import GreenGiantMotors
+from robot.vision import Marker
 
 class Wheels:
     def __init__(self, motors: Union[GreenGiantMotors, CytronBoard]) -> None:
         print("Wheels have started")
         self.motors = motors
+
+    async def goto(self, box: Marker) -> None:
+        box.dist
     
     async def move(self, meters: int) -> None:
         sign = int(meters / abs(meters))

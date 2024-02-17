@@ -27,30 +27,32 @@ async function* recursiveRead(dirPath: string): AsyncGenerator<File> {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	let window: vscode.WebviewPanel; 
+	let window: vscode.WebviewPanel | null = null;
 
 	//files
 	//files/delete
 	const sync = vscode.commands.registerCommand("brainbox.sync", async () => {
 		for await (const file of recursiveRead("./Dev/RoboCon/2023-2024")) {
-			await fetch(`http://192.168.4.1/files/save/${file.name}`, {
+			await fetch(`http://robot.go/files/save/${file.name}`, {
 				method: "POST",
 				body: file.content
 			});
-			console.log(`Saved file ${file.path}`);
+			vscode.window.showInformationMessage(`Saved file ${file.path}`);
 		}
 	});
 	context.subscriptions.push(sync);
 
 	const start = vscode.commands.registerCommand("brainbox.start", async () => {
+		vscode.window.showErrorMessage("Starting robot");
 		if (window) {
-			console.log("Robot is already active, stop it first");
+			vscode.window.showErrorMessage("Robot is already active, stop it first");
+			vscode.window.showErrorMessage(JSON.stringify(window));
 			return;
 		}
-		
+
 		window = vscode.window.createWebviewPanel("web", "Robocon logs", vscode.ViewColumn.Beside, {
 			enableScripts: true
-		});
+		}); 
 		window.webview.html = "<!DOCTYPE html>";
 		
 		window.webview.html += "<p> Packing files into zip.. </p>";
@@ -66,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
 		uploadBody.append("uploaded_file", blob, "code.zip");
 		
 		window.webview.html += "<p> Waiting for brainbox to unpack zip.. </p>";
-		await fetch("http://192.168.4.1/upload/upload", {
+		await fetch("http://robot.go/upload/upload", {
 			method: "POST",
 			body: uploadBody
 		});
@@ -76,7 +78,7 @@ export function activate(context: vscode.ExtensionContext) {
 		startBody.append("mode", "development");
 		
 		window.webview.html += "<p> Starting robot </p>";
-		await fetch("http://192.168.4.1/run/start", {
+		await fetch("http://robot.go/run/start", {
 			method: "POST",
 			body: startBody
 		});
@@ -89,15 +91,15 @@ export function activate(context: vscode.ExtensionContext) {
 				const logText = document.getElementById("logs");
 				const img = document.getElementById("image");
 				setInterval(async () => {
-					const res = await fetch("http://192.168.4.1/run/output");
+					const res = await fetch("http://robot.go/run/output");
 					const text = await res.text();
 					logText.innerText = text
-					img.src = "http://192.168.4.1/static/image.jpg";
+					img.src = "http://robot.go/static/image.jpg";
 				}, 1000)
 				</script>
 			</head>
 			<body>
-				<img id=image src="http://192.168.4.1/static/image.jpg" width="800" height="600" alt="Robot camera data">
+				<img id=image src="http://robot.go/static/image.jpg" width="800" height="600" alt="Robot camera data">
 				<pre id="logs" style="overflow-y:scroll; height:400px;"></pre>
 			</body>
 		</html>
@@ -106,9 +108,10 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(start);
 	
 	const stop = vscode.commands.registerCommand("brainbox.stop", () => {
-		window.dispose();
+		window?.dispose();
+		window = null;
 
-		fetch("http://192.168.4.1/run/stop", { method: "POST"});
+		fetch("http://robot.go/run/stop", { method: "POST"});
 	});
 	context.subscriptions.push(stop);
 }

@@ -1,3 +1,9 @@
-dist/
+#Node cache files
 node_modules/
+
+#VSCode extension output files
+dist/
 out/
+
+#Python files
+.venv

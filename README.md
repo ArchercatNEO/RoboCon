@@ -1,15 +1,12 @@
 **READ ME**
 
-This contains an extension to the robot class at https://github.com/systemetric/robot in the **terminator** class
+The RoboCon repository
 
-As of now we have movement options in the 4 basic async functions
+Contains the source code for Robocon
+* 2023
+* 2024
 
-*move(meters),*
+Additionaly contains type stubs for the robot library and a vscode debugging extension
 
-*turn(angles),*
-
-*goto(marker),*
-
-*snap(x, y)*
-
-Additionally an extension of robot.see() in the form of the combined *triangulate* and *peak* methods
+The robot type stubs may not work without venvs
+You must install the extension using `code --install-extension ./robot-debugger/robot-debugger-0.0.1.vsix`

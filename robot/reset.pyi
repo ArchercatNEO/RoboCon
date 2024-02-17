@@ -14,7 +14,7 @@ import robot.cytron as c
 import robot.greengiant as gg
 
 
-def reset():
+def reset() -> None:
     """Resets the robot components to their default state.
     Used by Shepherd when the Stop button is pressed.
     """

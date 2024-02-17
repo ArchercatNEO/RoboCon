@@ -1,1 +1,0 @@
-curl -X POST http://192.168.4.1/run/start -F zone=0 -F mode=development

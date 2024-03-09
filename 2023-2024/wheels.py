@@ -20,6 +20,7 @@ class Wheels:
     async def move(self, meters: float) -> None:
         sign = int(meters / abs(meters))
 
+        # Motors don't rotate at the same speed.
         self.motors[0] = 95 * sign
         self.motors[1] = 100 * sign
 

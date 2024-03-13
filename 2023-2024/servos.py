@@ -10,7 +10,7 @@ def lift(robot: Robot):
 def drop(robot: Robot):
     robot.servos[0] = -100
 
-def open_arms(robot: Robot):
+def open(robot: Robot):
     robot.servos[1] = 300
     robot.servos[2] = 200
 

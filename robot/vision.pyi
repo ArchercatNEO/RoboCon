@@ -44,7 +44,7 @@ class Marker():
     def __str__(self) -> str:
         """A reduced set of the attributes and description text"""
 
-class Detections(list[AT.Detection]):
+class Detections(list[Marker]):
     """A mutable return type for R.see"""
 
     def __str__(self) -> str:
